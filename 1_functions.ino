@@ -7,7 +7,7 @@ void start_message_on_led () { // стартовое сообщение
 
   display.println(F("GasDnW")); // сообщение
   display.display(); // вывести на экран
-  delay(1500); // задержка 1.5 секунды
+  delay(1000); // задержка 1.5 секунды
 
   display.clearDisplay(); // очистить экран
   display.setTextSize(2); // масштаб пикселей 1:1

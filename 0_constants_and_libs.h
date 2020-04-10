@@ -35,10 +35,10 @@ MQ2 mq2(MQ2PIN); //Инициация датчика газа
 int lpg, co, smoke, hudimity, temperature; // переменные для хранения значений с датчиков
 
 char ssid[] = "ssid";            // SSID сети
-char pass[] = "password";        // пароль от сети
+char pass[] = "pass";        // пароль от сети
 int status = WL_IDLE_STATUS;     // статус WiFi
 
-char server[] = "server_url"; // URL сервера
-const int port = 80; // Порт
+char server[] = "local server ip"; // URL сервера
+const int port = 8000; // Порт
 
 const int capacity = JSON_OBJECT_SIZE(5); // Размер объекта JSON
