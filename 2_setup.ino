@@ -6,13 +6,13 @@ void setup() {
     Serial.println(F("SSD1306 allocation failed"));
     while (true);
   }
-
-  start_message_on_led();
+  start_message_on_led(); // стартовое сообщение
 
   // инициализируем Serial для модуля ESP-01
   Serial1.begin(9600);
   // инициализируем модуль ESP-01
   WiFi.init(&Serial1);
+
   display_message("Initializing WiFi module", true, false);
 
   // проверка на наличие WiFi модуля

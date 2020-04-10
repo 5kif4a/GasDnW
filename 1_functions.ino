@@ -71,7 +71,7 @@ String serialize(bool dht, bool mq2) { // сериализуем данные с
   // фильтрация данных
   if (dht) {
     doc["Temperature"] = temperature;
-    doc["Huditity"] = hudimity;
+    doc["Hudimity"] = hudimity;
   }
 
   if (mq2) {
@@ -103,6 +103,7 @@ String get_data_from_DHT11() {
 }
 
 bool gas_detected() {
+  // проверка на присутствие газа  
   if (lpg > 0 || co > 0 || smoke > 0) return true;
   return false;
 }
@@ -133,9 +134,14 @@ void display_data_from_sensors() {
 }
 
 void httppost (String data, String endpoint) { // HTTP POST запрос на сервер
+  client.stop();
+  Serial.println("Start connection...");
+  display_message("Start...", false, false);
   if (client.connect(server, port)) {
     Serial.println("Connected to server");
+    display_message("Connected...", false, false);
     // Делаем POST запрос
+    display_message("Sending.", false, false);
     client.println("POST /" + endpoint + " HTTP/1.1");
     client.println("Host: " + String(server) + ":" + String(port));
     client.println("Accept: */*");
@@ -144,6 +150,10 @@ void httppost (String data, String endpoint) { // HTTP POST запрос на с
     client.println(data.length());
     client.println();
     client.print(data);
-    display_message("Sending data from sensors to the server", true, false);
+    display_message("Sent!", false, false);
+  }
+  else {
+    Serial.println("Connection failed!");
+    display_message("Connection failed!", true, false);
   }
 }
