@@ -14,14 +14,14 @@ void loop() {
   // выводим данные на дисплей
   display_data_from_sensors();
 
-  // отправляем на сервер данные с датчика DHT11
-  httppost(dht11_data, "dht");
-
-  if (gas_detected()) { // если датчик MQ2 обнаружил газы
-    display_message(" Warning!!! Gas detected", false, false);
-    httppost(mq2_data, "mq2"); // отправляем на сервер данные с датчика
+  // если с момента последнего соединения прошло 5 секунд,
+  if (millis() - lastConnectionTime > postingInterval) {
+    // отправляем на сервер данные с датчика DHT11
+    httppost(dht11_data, "dht");
+    
+    if (gas_detected()) { // если датчик MQ2 обнаружил газы
+      display_message(" Warning!!! Gas detected", false, false);
+      httppost(mq2_data, "mq2"); // отправляем на сервер данные с датчика
+    }
   }
-
-  // делаем запрос каждую секунду
-  delay(1000);
 }

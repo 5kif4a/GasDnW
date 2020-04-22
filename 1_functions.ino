@@ -29,7 +29,7 @@ void display_message(String msg, bool newline, bool clr) { // вывод тек�
   if (newline) { // выводим текст с новой строки если true
     display.println(msg);
   }
-  else {
+  else { // выводим текст в конец строки
     display.print(msg);
   }
   display.display(); // вывести на экран
@@ -68,6 +68,8 @@ void printWifiStatus() // вывод статуса WiFi соединения в
 String serialize(bool dht, bool mq2) { // сериализуем данные с датчиков в JSON
   StaticJsonDocument<capacity> doc;   // Объект JSON
   // записываем значения в объект JSON
+  
+  doc["device_id"] = DEVICE_ID; // ID устройства
   // фильтрация данных
   if (dht) {
     doc["Temperature"] = temperature;
@@ -79,7 +81,7 @@ String serialize(bool dht, bool mq2) { // сериализуем данные с
     doc["CO"] = co;
     doc["Smoke"] = smoke;
   }
-  //   сериализуем объект JSON
+  // сериализуем объект JSON
   String json = doc.as<String>();
   return json;
 }
@@ -103,7 +105,7 @@ String get_data_from_DHT11() {
 }
 
 bool gas_detected() {
-  // проверка на присутствие газа  
+  // проверка на присутствие газа
   if (lpg > 0 || co > 0 || smoke > 0) return true;
   return false;
 }
@@ -133,10 +135,14 @@ void display_data_from_sensors() {
   display_message(" ppm", true, false);
 }
 
-void httppost (String data, String endpoint) { // HTTP POST запрос на сервер
+void httppost (String data, String endpoint) { 
+  // HTTP POST запрос на сервер
+  // останавливаем соединение клиента перед каждым новым запросом
   client.stop();
+  // выводим сообщение о старте соединения
   Serial.println("Start connection...");
   display_message("Start...", false, false);
+  //  если соединение есть
   if (client.connect(server, port)) {
     Serial.println("Connected to server");
     display_message("Connected...", false, false);
@@ -150,9 +156,12 @@ void httppost (String data, String endpoint) { // HTTP POST запрос на с
     client.println(data.length());
     client.println();
     client.print(data);
+    // выводим сообщение об отправке данных
     display_message("Sent!", false, false);
+    // время установления соединения
+    lastConnectionTime = millis();
   }
-  else {
+  else { // если соединения нету выводим сообщение о провале
     Serial.println("Connection failed!");
     display_message("Connection failed!", true, false);
   }

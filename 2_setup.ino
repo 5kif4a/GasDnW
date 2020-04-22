@@ -32,7 +32,6 @@ void setup() {
     status = WiFi.begin(ssid, pass);
   }
 
-  // Вы подключены сейчас, поэтому распечатайте данные
   Serial.println("You're connected to the network");
   display_message("You're connected to the network", true, false);
 

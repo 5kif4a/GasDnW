@@ -12,6 +12,10 @@
 #define DHTPIN 6 // Пин данных датчика DHT
 #define DHTTYPE DHT11 // Тип датчика DHT, в нашем случае DHT11
 #define MQ2PIN A0 //Пин данных датчика MQ2
+#define DEVICE_ID 1 // ID устройства
+
+unsigned long lastConnectionTime = 0;         // в последний раз, когда вы подключались к серверу, в миллисекундах
+const unsigned long postingInterval = 1000L; // задержка между запросами/обновлениями, в миллисекундах
 
 // Настройки для дисплея OLED 0.96
 #define SCREEN_WIDTH 128 // ширина дисплея OLED в пикселях
@@ -32,13 +36,13 @@ WiFiEspClient client; // инициализиция объекта WiFi клие
 
 DHT dht(DHTPIN, DHTTYPE); //Инициация датчика влажности и температуры
 MQ2 mq2(MQ2PIN); //Инициация датчика газа
-int lpg, co, smoke, hudimity, temperature; // переменные для хранения значений с датчиков
+unsigned long lpg, co, smoke, hudimity, temperature; // переменные для хранения значений с датчиков
 
 char ssid[] = "ssid";            // SSID сети
-char pass[] = "pass";        // пароль от сети
+char pass[] = "password";        // пароль от сети
 int status = WL_IDLE_STATUS;     // статус WiFi
 
-char server[] = "local server ip"; // URL сервера
-const int port = 8000; // Порт
+char server[] = "server_url"; // URL сервера
+const int port = 80; // Порт
 
 const int capacity = JSON_OBJECT_SIZE(5); // Размер объекта JSON
